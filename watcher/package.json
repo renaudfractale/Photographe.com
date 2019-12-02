@@ -6,6 +6,7 @@
   "dependencies": {
     "chokidar": "^3.3.0",
     "node-watch": "^0.6.3",
+    "nodejs-nodemailer-outlook": "^1.2.1",
     "nodemailer": "^6.3.1"
   },
   "devDependencies": {},
