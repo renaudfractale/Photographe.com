@@ -1,0 +1,16 @@
+{
+  "name": "photographe.com",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "sqlite-sync": "^0.3.9",
+    "sqlite3": "^4.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node ./src/sqlite.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
