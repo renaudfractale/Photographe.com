@@ -1,0 +1,16 @@
+{
+  "name": "watcher",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "chokidar": "^3.3.0",
+    "node-watch": "^0.6.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "run": "node ./src/main.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
