@@ -121,15 +121,54 @@ async function readRecordsFromMediaTable (){
 
 //https://stackoverflow.com/questions/15575914/how-to-read-a-sqlite3-database-using-node-js-synchronously
 
-var sqlite = require('sqlite-sync'); //requiring
+//var sqlite = require('sqlite-sync'); //requiring
  
 //Connecting - if the file does not exist it will be created
-sqlite.connect('./db/sqlite3.db'); 
+//sqlite.connect('./db/sqlite3.db'); 
  
 
-var aa =sqlite.run("SELECT name FROM  sqlite_master WHERE  type ='table' AND  name NOT LIKE 'sqlite_%'");
+//var aa =sqlite.run("SELECT name FROM  sqlite_master WHERE  type ='table' AND  name NOT LIKE 'sqlite_%'");
 
-console.log(aa);
+//console.log(aa);
+
+class sqlitedb {
+  constructor(pathdb){
+    this.db= require('sqlite-sync');
+    this.db.connect(pathdb);
+    this.TablesName = new Map();
+    this.TablesName.set("Photographe" , "CREATE TABLE 'Photographe' (	'ID_Photographe'	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,	'Societe'	TEXT NOT NULL UNIQUE,	'Prenom'	TEXT,	'Nom'	TEXT,	'Telephone'	TEXT,	'Adresse_Rue'	TEXT,	'Adresse_CP'	TEXT,	'Adresse_Ville'	TEXT,	'SiteWeb'	TEXT);");
+    this.TablesName.set("Evenement" , "CREATE TABLE 'Evenement' (	'ID_Evenement'	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,	'Nom'	TEXT NOT NULL UNIQUE,	'Date_Start'	TEXT,	'Date_End'	TEXT,	'ID_Photographe'	INTEGER NOT NULL);");
+  }
+  init(){
+    var keyIter = this.TablesName.keys();
+
+    keyIterkeyIter
+
+
+
+    
+  }
+  isTableExist(NameTable){
+    var ListTables = this.db.run("SELECT name FROM  sqlite_master WHERE  type ='table' AND  name NOT LIKE 'sqlite_%'");
+    var bool = false;
+    ListTables.forEach(element => {
+      if(element.name == NameTable){
+        bool=true;
+      }
+    });
+    return bool;
+  }
+  close(){
+    this.db.close();
+  }
+}
+var db = new sqlitedb('./db/sqlite3_.db');
+
+console.log(db.isTableExist("aaaaa"));
+console.log(db.isTableExist("Seance"));
+
+
+db.close();
 
 // Closing connection 
-sqlite.close();
+//sqlite.close();
