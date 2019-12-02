@@ -127,3 +127,9 @@ var sqlite = require('sqlite-sync'); //requiring
 sqlite.connect('./db/sqlite3.db'); 
  
 
+var aa =sqlite.run("SELECT name FROM  sqlite_master WHERE  type ='table' AND  name NOT LIKE 'sqlite_%'");
+
+console.log(aa);
+
+// Closing connection 
+sqlite.close();
