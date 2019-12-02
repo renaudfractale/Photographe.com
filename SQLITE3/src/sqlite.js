@@ -140,9 +140,10 @@ class sqlitedb {
     this.TablesName.set("Evenement" , "CREATE TABLE 'Evenement' (	'ID_Evenement'	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,	'Nom'	TEXT NOT NULL UNIQUE,	'Date_Start'	TEXT,	'Date_End'	TEXT,	'ID_Photographe'	INTEGER NOT NULL);");
   }
   init(){
-    var keyIter = this.TablesName.keys();
-
-    keyIterkeyIter
+    for (var k of this.TablesName.keys()) {
+      console.log(k);
+    }
+    
 
 
 
@@ -164,9 +165,9 @@ class sqlitedb {
 }
 var db = new sqlitedb('./db/sqlite3_.db');
 
-console.log(db.isTableExist("aaaaa"));
-console.log(db.isTableExist("Seance"));
-
+//console.log(db.isTableExist("aaaaa"));
+//console.log(db.isTableExist("Seance"));
+db.init();
 
 db.close();
 
