@@ -1,204 +1,68 @@
+import * as fs from 'fs';
+import * as fs_extra from 'fs-extra';
 import {createConnection} from "typeorm";
-import {Photo} from "./entity/Photo";
-import {PhotoMetadata} from "./entity/PhotoMetadata";
-import {Album} from "./entity/Album";
-import {Author} from "./entity/Author";
+import {ConfigFolder,Utilitaire} from  './Global';
+import {Index} from  './entity/index';
 
-/*createConnection( ).then(async connection => {
-
-    let photo = new Photo();
-    photo.name = "Me and Bears";
-    photo.description = "I am near polar bears";
-    photo.filename = "photo-with-bears.jpg";
-    photo.views = 1;
-    photo.isPublished = true;
-
-    await connection.manager.save(photo);
-    console.log("Photo has been saved");
-
-}).catch(error => console.log(error));
-*/
-/*
-createConnection( ).then(async connection => {
-
-    let photo = new Photo();
-    photo.name = "Me and Bears";
-    photo.description = "I am near polar bears";
-    photo.filename = "photo-with-bears.jpg";
-    photo.views = 1;
-    photo.isPublished = true;
-
-    let photoRepository = connection.getRepository(Photo);
-
-    await photoRepository.save(photo);
-    console.log("Photo has been saved");
-
-    let savedPhotos = await photoRepository.find();
-    console.log("All photos from the db: ", savedPhotos);
-
-    let firstPhoto = await photoRepository.findOne(1);
-    console.log("First photo from the db: ", firstPhoto);
-
-    let meAndBearsPhoto = await photoRepository.findOne({ name: "Me and Bears" });
-    console.log("Me and Bears photo from the db: ", meAndBearsPhoto);
-
-    let allViewedPhotos = await photoRepository.find({ views: 1 });
-    console.log("All viewed photos: ", allViewedPhotos);
-
-    let allPublishedPhotos = await photoRepository.find({ isPublished: true });
-    console.log("All published photos: ", allPublishedPhotos);
-
-    let [allPhotos2, photosCount] = await photoRepository.findAndCount();
-    console.log("All photos: ", allPhotos2);
-    console.log("Photos count: ", photosCount);
-
-    let photoToUpdate = await photoRepository.findOne(1);
-    photoToUpdate.name = "Me, my friends and polar bears";
-    await photoRepository.save(photoToUpdate);
-
-//    let photoToRemove = await photoRepository.findOne(1);
-//    await photoRepository.remove(photoToRemove);
+var Config = new ConfigFolder()
+var Utils = new Utilitaire()
+function CreateFolder(path : string) : boolean {
+    console.log("Demande de création du dossier : "+ path)
+    try {
+        if (!fs.existsSync(path)){
+          fs.mkdirSync(path)
+          console.log("Céation du dossier : "+ path)
+          return true
+        } else {
+            console.log("Le dossier : "+ path+ " existe déjà, on ne fait rien")
+        }
+      } catch (err) {
+        console.error(err)
+      }
+      return false
+}
 
 
-}).catch(error => console.log(error));*/
+class Indexdb {
+    path : string;
+    constructor() {
+        let Config = new ConfigFolder()
+        this.path = Config.Indexdb;
+    }
 
-//Onne2One simple
-/*
-createConnection( ).then(async connection => {
-    // create a photo
-    let photo = new Photo();
-    photo.name = "Me and Bears";
-    photo.description = "I am near polar bears";
-    photo.filename = "photo-with-bears.jpg";
-    photo.isPublished = true;
-
-    // create a photo metadata
-    let metadata = new PhotoMetadata();
-    metadata.height = 640;
-    metadata.width = 480;
-    metadata.compressed = true;
-    metadata.comment = "cybershoot";
-    metadata.orientation = "portait";
-    metadata.photo = photo; // this way we connect them
-
-    // get entity repositories
-    let photoRepository = connection.getRepository(Photo);
-    let metadataRepository = connection.getRepository(PhotoMetadata);
-
-    // first we should save a photo
-    await photoRepository.save(photo);
-
-    // photo is saved. Now we need to save a photo metadata
-    await metadataRepository.save(metadata);
-
-    // done
-    console.log("Metadata is saved, and relation between metadata and photo is created in the database too");
+    CreateUser(login : string,pwdclaire : string,isP : boolean,IsC : boolean) : number {
+        let index = new Index()
+        index.CreateUser(login,pwdclaire,isP,IsC)
+        createConnection({
+            type: "sqlite",
+            database  : this.path,
+            entities: [
+                "./src/entity/index.ts"
+             ],
+            "logging": false,
+            "synchronize": true,
+        }).then(async connection => {
+            await connection.manager.save(index);
+            console.log("Photo has been saved");
+        }).catch(error => console.log(error));
+        return 1;
+    }
 
 
-
-    let photoRepository2 = connection.getRepository(Photo);
-    let photos = await connection
-            .getRepository(Photo)
-            .createQueryBuilder("photo")
-            .innerJoinAndSelect("photo.metadata", "metadata")
-            .getMany();
+}
 
 
-}).catch(error => console.log(error));
-*/
+function InitSite(){
+    CreateFolder(Config.Folder.DB)
+    CreateFolder(Config.Folder.Photograhes)
+    CreateFolder(Config.Folder.Clients)
+    let indexdb = new Indexdb()
+    indexdb.CreateUser("Admin","Admin",false,true)
+}
 
-// On2One smart Cascade
-/*
-createConnection( ).then(async connection => {
-
-    console.log("create photo object")
-    let photo = new Photo();
-    photo.name = "Me and Bears";
-    photo.description = "I am near polar bears";
-    photo.filename = "photo-with-bears.jpg";
-    photo.isPublished = true;
-    photo.views = 1;
-    
-
-    console.log(photo)
-
-    console.log("create photo metadata object")
-    let metadata = new PhotoMetadata();
-    metadata.height = 640;
-    metadata.width = 480;
-    metadata.compressed = true;
-    metadata.comment = "cybershoot";
-    metadata.orientation = "portait";
-
-    console.log(metadata)
-
-    photo.metadata = metadata; // this way we connect them
-
-    console.log(photo)
-
-    console.log("get repository")
-    let photoRepository = connection.getRepository(Photo);
-
-    console.log("saving a photo also save the metadata")
-    await photoRepository.save(photo);
-
-    console.log("Photo is saved, photo metadata is saved too.")
-
-
-
-
-
-}).catch(error => console.log(error));
-
-*/
-
-
-createConnection( ).then(async connection => {
-
-
-
-console.log("create photo object")
-    let photo = new Photo();
-    photo.name = "Me and Bears";
-    photo.description = "I am near polar bears";
-    photo.filename = "photo-with-bears.jpg";
-    photo.isPublished = true;
-    photo.views = 1;
-    
-
-    console.log(photo)
-
-    console.log("create photo metadata object")
-    let metadata = new PhotoMetadata();
-    metadata.height = 640;
-    metadata.width = 480;
-    metadata.compressed = true;
-    metadata.comment = "cybershoot";
-    metadata.orientation = "portait";
-
-    console.log(metadata)
-
-    photo.metadata = metadata; // this way we connect them
-
-    console.log(photo)
-
-    console.log("create a few albums")
-let album1 = new Album();
-album1.name = "Bears";
-await connection.manager.save(album1);
-
-let album2 = new Album();
-album2.name = "Me";
-await connection.manager.save(album2);
-
-photo.albums = [album1, album2];
-console.log(photo)
-await connection.manager.save(photo);
-
-// now our photo is saved and albums are attached to it
-// now lets load them:
-const loadedPhoto = await connection
-    .getRepository(Photo)
-    .findOne(1, { relations: ["albums"] });
-
-}).catch(error => console.log(error));
+function  ResteSite(){
+    fs_extra.removeSync(Config.Folder.DB);
+    //console.log('Deleted files and directories:\n', deletedPaths.join('\n'));
+}
+InitSite();
+//ResteSite();
