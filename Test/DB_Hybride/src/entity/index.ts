@@ -4,7 +4,7 @@ import {Md5} from 'ts-md5/dist/md5';
 import {ConfigFolder, Utilitaire} from  '../Global';
 
 @Entity()
-export class Index {
+export class Index {    
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -22,7 +22,7 @@ export class Index {
     isClient: boolean;
     
     @Column()
-    isDel: boolean;
+    isActive: boolean;
 
     CheckPassword(pwdclair : string) : boolean {
         return this.CreatePassword(this.login,pwdclair)===this.password
@@ -62,6 +62,6 @@ export class Index {
         this.password = this.CreatePassword(login,pwdclaire);
         this.isPhotographe = isP
         this.isClient = IsC
-        this.isDel = false
+        this.isActive = true
     }
 }

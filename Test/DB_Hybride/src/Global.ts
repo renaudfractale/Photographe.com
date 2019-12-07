@@ -1,3 +1,5 @@
+import { realpathSync } from "fs";
+
 export class FolderRoot {
     //member variables
     Photograhes: string;
@@ -10,12 +12,28 @@ export class FolderRoot {
     }
 }
 
+export class configdb{
+    title : string;
+    pathdb : string;
+    namets : string[];
+    entities : string[] = [];
+    constructor(name : string , path : string,names: string[] ){
+        this.pathdb = path
+        this.namets = names
+        names.forEach(name =>{
+            this.entities.push("./src/entity/"+name+".ts")
+        })
+    }
+}
+
+
+
 export class ConfigFolder {
     Folder: FolderRoot;
-    Indexdb : string
+    Indexdb : configdb
     constructor() {
         this.Folder = new FolderRoot();
-        this.Indexdb = this.Folder.DB+"/index.db"
+        this.Indexdb = new configdb("index",this.Folder.DB+"/index.db",["index"])
     }
 }
 

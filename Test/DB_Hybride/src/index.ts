@@ -1,8 +1,7 @@
 import * as fs from 'fs';
 import * as fs_extra from 'fs-extra';
-import {createConnection} from "typeorm";
 import {ConfigFolder,Utilitaire} from  './Global';
-import {Index} from  './entity/index';
+import {Indexdb} from  './db/indexdb';
 
 var Config = new ConfigFolder()
 var Utils = new Utilitaire()
@@ -22,47 +21,57 @@ function CreateFolder(path : string) : boolean {
       return false
 }
 
-
-class Indexdb {
-    path : string;
-    constructor() {
-        let Config = new ConfigFolder()
-        this.path = Config.Indexdb;
-    }
-
-    CreateUser(login : string,pwdclaire : string,isP : boolean,IsC : boolean) : number {
-        let index = new Index()
-        index.CreateUser(login,pwdclaire,isP,IsC)
-        createConnection({
-            type: "sqlite",
-            database  : this.path,
-            entities: [
-                "./src/entity/index.ts"
-             ],
-            "logging": false,
-            "synchronize": true,
-        }).then(async connection => {
-            await connection.manager.save(index);
-            console.log("Photo has been saved");
-        }).catch(error => console.log(error));
-        return 1;
-    }
-
-
-}
-
-
-function InitSite(){
+async function InitSite(){
     CreateFolder(Config.Folder.DB)
     CreateFolder(Config.Folder.Photograhes)
     CreateFolder(Config.Folder.Clients)
     let indexdb = new Indexdb()
-    indexdb.CreateUser("Admin","Admin",false,true)
+    let id1 : number = await indexdb.CreateUser("Admin","Admin",false,true)
+    console.log("id1 : " );
+    console.log(id1)
+    let id2 : number = await indexdb.CreateUser("Admin","Admin",false,true)
+    console.log("id2 : " );
+    console.log(id2)
+    let profiles = await indexdb.GetProfileByLogin("Admin")
+    console.log("Profiles 2: " );
+    console.log(profiles)
+    console.log("*****************   1  *******************");
+    console.log(await indexdb.UnActiveUserById(id1))
+    console.log("*****************   2  *************************");
+    console.log(await indexdb.ActiveUserById(id1))
+    console.log("*****************   3  *************************");
+    console.log(await indexdb.ActiveUserById(id2))
+    console.log("*****************   4  *************************");
+    console.log(await indexdb.DelUserById(id2))
+    console.log("*****************   5  *************************");
+    console.log(await indexdb.DelUserById(id2))
+    console.log("*****************   6  *************************");
+    let id3 : number = await indexdb.CreateUser("User","User",false,true)
+    console.log("id3 : " );
+    console.log(id3)
+    console.log("*****************   7  *************************");
+    let id4 : number = await indexdb.CreateUser("Admin","Admin",false,true)
+    console.log("id4 : " );
+    console.log(id4)
+    console.log("*****************   8  *************************");
+    let P1 = await  indexdb.GetUserByLogin("Admin")
+    console.log("out P1: " );
+    console.log(P1)
+    console.log("*****************   9  *************************");
+    let P2 = await  indexdb.GetUserByLogin("User")
+    console.log("out P2: " );
+    console.log(P2)
+    console.log("*****************   10  *************************");
+    let P3 = await  indexdb.GetUserByLogin("User3")
+    console.log("out P3: " );
+    console.log(P3)
+
 }
 
 function  ResteSite(){
     fs_extra.removeSync(Config.Folder.DB);
     //console.log('Deleted files and directories:\n', deletedPaths.join('\n'));
 }
+ResteSite();
 InitSite();
 //ResteSite();
