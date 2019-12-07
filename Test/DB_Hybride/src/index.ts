@@ -1,25 +1,9 @@
-import * as fs from 'fs';
-import * as fs_extra from 'fs-extra';
 import {ConfigFolder,Utilitaire} from  './Global';
 import {Indexdb} from  './db/indexdb';
-
+import {profilePhotographedb} from  './db/profilePhotographedb';
 var Config = new ConfigFolder()
 var Utils = new Utilitaire()
-function CreateFolder(path : string) : boolean {
-    console.log("Demande de création du dossier : "+ path)
-    try {
-        if (!fs.existsSync(path)){
-          fs.mkdirSync(path)
-          console.log("Céation du dossier : "+ path)
-          return true
-        } else {
-            console.log("Le dossier : "+ path+ " existe déjà, on ne fait rien")
-        }
-      } catch (err) {
-        console.error(err)
-      }
-      return false
-}
+
 async function TestIndex(db : Indexdb ){
     let id1 : number = await db.CreateUser("Admin","Admin",false,true)
     console.log("id1 : " );
@@ -70,17 +54,49 @@ async function TestIndex(db : Indexdb ){
     console.log(P5)
 }
 async function InitSite(){
-    CreateFolder(Config.Folder.DB)
-    CreateFolder(Config.Folder.Photograhes)
-    CreateFolder(Config.Folder.Clients)
-    await TestIndex(new Indexdb)
-
+    Utils.CreateFolder(Config.Folder.DB)
+    Utils.CreateFolder(Config.Folder.Photograhes)
+    Utils.CreateFolder(Config.Folder.Clients)
+    /*await TestIndex(new Indexdb)
+    let Profile =  new profilePhotographedb(1)
+    let id1 = await Profile.CreateProfile("Renaud","Henry","","","","","","","","")
+    console.log("id1 : " );
+    console.log(id1)*/
 }
 
 function  ResteSite(){
-    fs_extra.removeSync(Config.Folder.DB);
-    //console.log('Deleted files and directories:\n', deletedPaths.join('\n'));
+  Utils.RemoveFolder(Config.Folder.DB)
 }
 ResteSite();
 InitSite();
 //ResteSite();
+
+import {createConnection} from "typeorm";
+/*
+createConnection({
+	type: 'aurora-data-api',
+	database: 'photos',
+	secretArn: 'arn:aws:secretsmanager:xxxx',
+	resourceArn: 'arn:aws:rds:xxxxxx',
+	region: 'xx-xxx-x',
+}).then(async connection => {
+  out = await connection.manager.save(index);
+  console.log("Photo has been saved");
+  await connection.close()
+}).catch(error => console.log(error));*/
+
+var parser = require('aws-arn-parser');
+var myAwsString = "arn:aws:dynamodb:us-east-2:451976899866:table/photos";
+ 
+var arn = parser(myAwsString);
+ 
+console.log(arn);
+
+const connection = createConnection({
+  type: 'aurora-data-api',
+  database: 'test-db',
+  secretArn: 'arn:aws:dynamodb:us-east-2:451976899866:table/photos"',
+  resourceArn: 'arn:aws: 	rds.us-east-2.amazonaws.com:xxxxxx:xxxxxx',
+  region: 'eu-west-1',
+})
+ 

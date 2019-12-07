@@ -1,6 +1,6 @@
 import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
 
-import {ConfigFolder, Utilitaire} from  '../Global';
+//import {ConfigFolder, Utilitaire} from  '../Global';
 
 @Entity()
 export class profilePhotographe {    

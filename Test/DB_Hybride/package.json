@@ -8,13 +8,16 @@
       "typescript": "3.3.3333"
    },
    "dependencies": {
+      "aws-arn-parser": "^1.0.1",
+      "aws-sdk": "^2.585.0",
       "del": "^5.1.0",
       "fs": "0.0.1-security",
       "fs-extra": "^8.1.0",
       "reflect-metadata": "^0.1.10",
       "sqlite3": "^4.0.3",
       "ts-md5": "^1.2.7",
-      "typeorm": "0.2.20"
+      "typeorm": "0.2.20",
+      "typeorm-aurora-data-api-driver": "^1.1.8"
    },
    "scripts": {
       "start": "ts-node src/index.ts"
