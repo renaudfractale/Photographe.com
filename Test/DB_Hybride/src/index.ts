@@ -87,11 +87,11 @@ createConnection({
 
 createConnection({
   type: 'mariadb',
-  host : "ip",
+  host : "127.0.0.1",
   port : 3306,
-  username : "user",
-  password  : "pass",
-  database: "db_mains",
+  username : "root",
+  password  : "passe",
+  database: "db",
   "synchronize": true,
   "logging": true,
   "entities": [
