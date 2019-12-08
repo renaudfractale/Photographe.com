@@ -1,5 +1,5 @@
 import {createConnection} from "typeorm";
-import {ConfigFolder,Utilitaire,configdb} from  '../Global';
+import {ConfigFolder,configdb} from  '../Global';
 import {Index} from  '../entity/index';
 export class Indexdb {
     db : configdb;

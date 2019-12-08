@@ -85,18 +85,18 @@ createConnection({
   await connection.close()
 }).catch(error => console.log(error));*/
 
-var parser = require('aws-arn-parser');
-var myAwsString = "arn:aws:dynamodb:us-east-2:451976899866:table/photos";
- 
-var arn = parser(myAwsString);
- 
-console.log(arn);
-
-const connection = createConnection({
-  type: 'aurora-data-api',
-  database: 'test-db',
-  secretArn: 'arn:aws:dynamodb:us-east-2:451976899866:table/photos"',
-  resourceArn: 'arn:aws: 	rds.us-east-2.amazonaws.com:xxxxxx:xxxxxx',
-  region: 'eu-west-1',
-})
- 
+createConnection({
+  type: 'mariadb',
+  host : "ip",
+  port : 3306,
+  username : "user",
+  password  : "pass",
+  database: "db_mains",
+  "synchronize": true,
+  "logging": true,
+  "entities": [
+     "./entity/index.ts"
+  ]
+}).then(async connection => {
+  await connection.close()
+}).catch(error => console.log(error));

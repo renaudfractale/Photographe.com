@@ -13,6 +13,7 @@
       "del": "^5.1.0",
       "fs": "0.0.1-security",
       "fs-extra": "^8.1.0",
+      "mysql": "^2.17.1",
       "reflect-metadata": "^0.1.10",
       "sqlite3": "^4.0.3",
       "ts-md5": "^1.2.7",
